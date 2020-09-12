@@ -3,12 +3,15 @@ import Grid from '@material-ui/core/Grid';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
+import { red, green, yellow } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import { AxiosResponse } from 'axios';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
+import ResolvedIcon from '@material-ui/icons/Done';
+import UnresolvedIcon from '@material-ui/icons/Warning';
+
 import { formatDate } from 'utils/format';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import FormBase from '../FormBase';
@@ -29,6 +32,15 @@ const useStyles = makeStyles((theme: Theme) => ({
         '&:hover': {
             backgroundColor: red[900],
         },
+    },
+    yellow: {
+        color: yellow[600],
+    },
+    green: {
+        color: green[600],
+    },
+    bold: {
+        fontWeight: 'bold',
     },
 }));
 
@@ -79,7 +91,31 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                <Typography variant='body1'>
+                {report.resolved ? (
+                    <Typography
+                        variant='subtitle2'
+                        align='left'
+                        className={classes.bold}
+                    >
+                        <ResolvedIcon className={classes.green} />
+                        Your report has been reviewed and used to improve
+                        Prytaneum. Thank you very much!
+                    </Typography>
+                ) : (
+                    <Typography
+                        variant='subtitle2'
+                        align='left'
+                        className={classes.bold}
+                    >
+                        <UnresolvedIcon className={classes.yellow} />
+                        Your report is still pending to be reviewed. We will
+                        address it at our earliest convenience. Thank you for
+                        your time!
+                    </Typography>
+                )}
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant='body1' paragraph>
                     You can change the description of your report. Once you are
                     done, just press the “Submit” button.
                 </Typography>

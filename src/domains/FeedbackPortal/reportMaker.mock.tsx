@@ -12,6 +12,8 @@ export function makeFeedbackReport(): FeedbackReport {
         date: faker.date.between(recent, future).toISOString(),
         submitterId: faker.random.alphaNumeric(12),
         type: 'Feedback',
+        replies: [],
+        resolved: faker.random.boolean(),
     };
 }
 
@@ -23,5 +25,7 @@ export function makeBugReport(): BugReport {
         townhallId: faker.random.alphaNumeric(12),
         submitterId: faker.random.alphaNumeric(12),
         type: 'Bug',
+        replies: [],
+        resolved: faker.random.boolean(),
     };
 }

@@ -22,10 +22,10 @@ export async function createFeedbackReport(form: FeedbackForm, date: string) {
 
 export async function getFeedbackReportsBySubmitter(
     page: number,
-    ascending: string,
+    sortByDate: string,
     submitterId: string
 ) {
-    if (!page || !ascending) {
+    if (!page || !sortByDate) {
         throw errors.fieldError();
     }
 
@@ -35,7 +35,7 @@ export async function getFeedbackReportsBySubmitter(
 
     const params = {
         page,
-        ascending,
+        sortByDate,
     };
     return axios.get<{ reports: FeedbackReport[]; count: number }>(
         `/api/feedback/get-reports/${submitterId}`,
@@ -88,10 +88,10 @@ export async function createBugReport(
 
 export async function getBugReportsBySubmitter(
     page: number,
-    ascending: string,
+    sortByDate: string,
     submitterId: string
 ) {
-    if (!page || !ascending) {
+    if (!page || !sortByDate) {
         throw errors.fieldError();
     }
 
@@ -101,7 +101,7 @@ export async function getBugReportsBySubmitter(
 
     const params = {
         page,
-        ascending,
+        sortByDate,
     };
     return axios.get<{ reports: BugReport[]; count: number }>(
         `/api/bugs/get-reports/${submitterId}`,

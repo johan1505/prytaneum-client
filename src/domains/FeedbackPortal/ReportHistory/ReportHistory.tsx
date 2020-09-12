@@ -59,7 +59,7 @@ export default function ReportHistory() {
     const [numOfPages, setNumOfPages] = React.useState(0);
     const [reports, setReports] = React.useState<Report[]>([]);
 
-    const handleReportChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const handleReportTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
         setReportType(e.target.value as string);
     };
 
@@ -113,7 +113,7 @@ export default function ReportHistory() {
         if (prevReportType !== reportType) {
             setPage(1);
         }
-        // save the report Type just selected
+        // save the report type just selected
         setPrevReportType(reportType);
 
         // Decide which type of request to send
@@ -176,7 +176,7 @@ export default function ReportHistory() {
                                         displayEmpty
                                         required
                                         value={reportType}
-                                        onChange={handleReportChange}
+                                        onChange={handleReportTypeChange}
                                         input={<Input />}
                                         IconComponent={() => <ArrowDownIcon />}
                                     >
@@ -241,7 +241,7 @@ export default function ReportHistory() {
             </AppBar>
 
             {/*  Loader is rendering at some weird position, is it because of the absolute attribute?  */}
-            <Grid container justify='center' alignItems='center' xs={12}>
+            <Grid container justify='center' alignItems='center'>
                 {isLoadingFeedback || isLoadingBug ? (
                     <Loader />
                 ) : (
@@ -252,7 +252,7 @@ export default function ReportHistory() {
             </Grid>
 
             {reports.length !== 0 && (
-                <Grid container justify='center' alignItems='center' xs={12}>
+                <Grid container justify='center' alignItems='center'>
                     <Pagination
                         siblingCount={0}
                         color='primary'

@@ -1,36 +1,24 @@
 import { rest } from 'msw';
-import faker from 'faker';
 
-const recent = faker.date.recent();
-const future = faker.date.future();
+import {
+    makeFeedbackReport,
+    makeBugReport,
+} from 'domains/FeedbackPortal/reportMaker.mock';
 
-const makeBaseReport = () => ({
-    _id: faker.random.alphaNumeric(5),
-    date: faker.date.between(recent, future),
-    description: faker.lorem.paragraphs(),
-    user: {
-        _id: faker.random.alphaNumeric(5),
-    },
-});
-
-const makeFeedbackReports = (amount: number) => {
-    const feedbackReports = [];
-    for (let i = 0; i < amount; i += 1) {
-        feedbackReports.push(makeBaseReport());
+const makeFeedbackReports = (n: number) => {
+    const reports = [];
+    for (let i = 0; i < n; i += 1) {
+        reports.push(makeFeedbackReport());
     }
-    return feedbackReports;
+    return reports;
 };
 
-const makeBugReports = (amount: number) => {
-    const bugReports = [];
-    for (let i = 0; i < amount; i += 1) {
-        const tempReport = makeBaseReport();
-        bugReports.push({
-            ...tempReport,
-            townhallId: faker.random.alphaNumeric(12),
-        });
+const makeBugReports = (n: number) => {
+    const reports = [];
+    for (let i = 0; i < n; i += 1) {
+        reports.push(makeBugReport());
     }
-    return bugReports;
+    return reports;
 };
 
 export default [
@@ -53,7 +41,7 @@ export default [
         const { submitterId } = req.params;
         const page = req.url.searchParams.get('page');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const ascending = req.url.searchParams.get('ascending');
+        const sortByDate = req.url.searchParams.get('sortByDate');
 
         if (!page) {
             return res(ctx.status(400));
@@ -106,10 +94,9 @@ export default [
     rest.get('/api/bugs/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
-
         const page = req.url.searchParams.get('page');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const ascending = req.url.searchParams.get('ascending');
+        const sortByDate = req.url.searchParams.get('sortByDate');
 
         if (!page) {
             return res(ctx.status(400));

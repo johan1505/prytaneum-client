@@ -62,16 +62,16 @@ describe('#FeedbackRports', () => {
 
     describe('#get', () => {
         const page = faker.random.number();
-        const ascending = 'false';
+        const sortByDate = 'false';
         const submitterId = faker.random.alphaNumeric(12);
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getFeedbackReportsBySubmitter(0, ascending, submitterId)
+                API.getFeedbackReportsBySubmitter(0, sortByDate, submitterId)
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
-        it('should reject since ascending is not provided', async () => {
+        it('should reject since sortByDate is not provided', async () => {
             await expect(
                 API.getFeedbackReportsBySubmitter(page, '', submitterId)
             ).rejects.toThrow(errors.fieldError());
@@ -80,7 +80,7 @@ describe('#FeedbackRports', () => {
 
         it('should reject since submitterId is not provided', async () => {
             await expect(
-                API.getFeedbackReportsBySubmitter(page, ascending, '')
+                API.getFeedbackReportsBySubmitter(page, sortByDate, '')
             ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
@@ -91,14 +91,14 @@ describe('#FeedbackRports', () => {
                 resolvedValue
             );
             await expect(
-                API.getFeedbackReportsBySubmitter(page, ascending, submitterId)
+                API.getFeedbackReportsBySubmitter(page, sortByDate, submitterId)
             ).resolves.toBe(resolvedValue);
             expect(axios.get).toHaveBeenCalledWith(
                 `/api/feedback/get-reports/${submitterId}`,
                 {
                     params: {
                         page,
-                        ascending,
+                        sortByDate,
                     },
                 }
             );
@@ -207,17 +207,17 @@ describe('#BugRports', () => {
 
     describe('#get', () => {
         const page = faker.random.number();
-        const ascending = 'true';
+        const sortByDate = 'true';
         const submitterId = faker.random.alphaNumeric(12);
 
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getBugReportsBySubmitter(0, ascending, submitterId)
+                API.getBugReportsBySubmitter(0, sortByDate, submitterId)
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
-        it('should reject since ascending is not provided', async () => {
+        it('should reject since sortByDate is not provided', async () => {
             await expect(
                 API.getBugReportsBySubmitter(page, '', submitterId)
             ).rejects.toThrow(errors.fieldError());
@@ -226,7 +226,7 @@ describe('#BugRports', () => {
 
         it('should reject since submitterId is not provided', async () => {
             await expect(
-                API.getBugReportsBySubmitter(page, ascending, '')
+                API.getBugReportsBySubmitter(page, sortByDate, '')
             ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
@@ -237,14 +237,14 @@ describe('#BugRports', () => {
                 resolvedValue
             );
             await expect(
-                API.getBugReportsBySubmitter(page, ascending, submitterId)
+                API.getBugReportsBySubmitter(page, sortByDate, submitterId)
             ).resolves.toBe(resolvedValue);
             expect(axios.get).toHaveBeenCalledWith(
                 `/api/bugs/get-reports/${submitterId}`,
                 {
                     params: {
                         page,
-                        ascending,
+                        sortByDate,
                     },
                 }
             );
