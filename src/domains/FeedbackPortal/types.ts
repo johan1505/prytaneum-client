@@ -16,10 +16,10 @@ export interface BugReportForm extends ReportForm {
 interface User {
     _id: string
 }
-interface Reply {
+export interface Reply {
     content: string;
     repliedBy: User;
-    repliedDate: Date;
+    repliedDate: string;
 }
 
 type Report = Required<ReportForm> & {

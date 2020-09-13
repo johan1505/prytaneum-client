@@ -1,4 +1,6 @@
 import React from 'react';
+import Collapse from '@material-ui/core/Collapse';
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
@@ -9,11 +11,13 @@ import { AxiosResponse } from 'axios';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ResolvedIcon from '@material-ui/icons/Done';
 import UnresolvedIcon from '@material-ui/icons/Warning';
 
 import { formatDate } from 'utils/format';
 import ReportStateContext from '../Contexts/ReportStateContext';
+import Reply from '../Reply';
 import FormBase from '../FormBase';
 import { FeedbackReport, BugReport } from '../types';
 
@@ -42,9 +46,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     bold: {
         fontWeight: 'bold',
     },
+    marginTop: {
+        marginTop: 25,
+    },
 }));
 
 export default function ReportSummary({ report, callBack }: SummaryProps) {
+    const [showReplies, setShowReplies] = React.useState(false);
+
+    const handleShowRepliesClick = () => {
+        setShowReplies(!showReplies);
+    };
+
     const { updateReport, refetchReports } = React.useContext(
         ReportStateContext
     );
@@ -145,6 +158,31 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                     }
                 />
             </Grid>
+            {report.replies.length > 0 && (
+                <Grid item container>
+                    <Grid item xs={12}>
+                        <Button
+                            id='showReplies'
+                            fullWidth
+                            variant='contained'
+                            color='primary'
+                            startIcon={<ExpandMoreIcon />}
+                            onClick={handleShowRepliesClick}
+                        >
+                            Show Replies
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Collapse in={showReplies} timeout='auto'>
+                            {report.replies.map((reply, index) => (
+                                <div className={classes.marginTop}>
+                                    <Reply key={index} reply={reply} />
+                                </div>
+                            ))}
+                        </Collapse>
+                    </Grid>
+                </Grid>
+            )}
         </Grid>
     );
 }
