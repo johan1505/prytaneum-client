@@ -130,3 +130,38 @@ export async function deleteBugReport(_id: string) {
     const body = { _id };
     return axios.post('/api/bugs/delete-report', body);
 }
+
+export async function updateReportResolvedStatus(
+    _id: string,
+    resolved: 'true' | 'false',
+    reportType: 'feedback' | 'bugs'
+) {
+    if (!_id || !resolved || !reportType) {
+        throw errors.internalError();
+    }
+    const body = {
+        resolvedStatus: resolved === 'true',
+    };
+    return axios.post(`/api/${reportType}/updateResolvedStatus/${_id}`, body);
+}
+
+export async function replyToReport(
+    _id: string,
+    replyContent: string,
+    repliedDate: string,
+    reportType: 'feedback' | 'bugs'
+) {
+    if (!_id || !repliedDate || !reportType) {
+        throw errors.internalError();
+    }
+    if (!replyContent) {
+        throw errors.fieldError();
+    }
+
+    const body = {
+        replyContent,
+        repliedDate,
+    };
+
+    return axios.post(`/api/${reportType}/replyTo/${_id}`, body);
+}
