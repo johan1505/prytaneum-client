@@ -1,6 +1,5 @@
 import React from 'react';
 import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
@@ -12,10 +11,12 @@ import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 import LoadingButton from 'components/LoadingButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ResolvedIcon from '@material-ui/icons/Done';
 import UnresolvedIcon from '@material-ui/icons/Warning';
 
 import { formatDate } from 'utils/format';
+import Bold from 'components/Bold';
 import ReportStateContext from '../Contexts/ReportStateContext';
 import Reply from '../Reply';
 import FormBase from '../FormBase';
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function ReportSummary({ report, callBack }: SummaryProps) {
     const [showReplies, setShowReplies] = React.useState(false);
+    const [snack] = useSnack();
 
     const handleShowRepliesClick = () => {
         setShowReplies(!showReplies);
@@ -61,7 +63,6 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
     const { updateReport, refetchReports } = React.useContext(
         ReportStateContext
     );
-    const [snack] = useSnack();
 
     type deleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
     const endpoints: {
@@ -104,28 +105,22 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                {report.resolved ? (
-                    <Typography
-                        variant='subtitle2'
-                        align='left'
-                        className={classes.bold}
-                    >
-                        <ResolvedIcon className={classes.green} />
-                        Your report has been reviewed and used to improve
-                        Prytaneum. Thank you very much!
-                    </Typography>
-                ) : (
-                    <Typography
-                        variant='subtitle2'
-                        align='left'
-                        className={classes.bold}
-                    >
-                        <UnresolvedIcon className={classes.yellow} />
-                        Your report is still pending to be reviewed. We will
-                        address it at our earliest convenience. Thank you for
-                        your time!
-                    </Typography>
-                )}
+                <Bold>
+                    {report.resolved ? (
+                        <>
+                            <ResolvedIcon className={classes.green} />
+                            Your report has been reviewed and used to improve
+                            Prytaneum. Thank you very much!
+                        </>
+                    ) : (
+                        <>
+                            <UnresolvedIcon className={classes.yellow} />
+                            Your report is still pending to be reviewed. We will
+                            address it at our earliest convenience. Thank you
+                            for your time.
+                        </>
+                    )}
+                </Bold>
             </Grid>
             <Grid item xs={12}>
                 <Typography variant='body1' paragraph>
@@ -166,17 +161,23 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                             fullWidth
                             variant='contained'
                             color='primary'
-                            startIcon={<ExpandMoreIcon />}
+                            startIcon={
+                                showReplies ? (
+                                    <ExpandLessIcon />
+                                ) : (
+                                    <ExpandMoreIcon />
+                                )
+                            }
                             onClick={handleShowRepliesClick}
                         >
-                            Show Replies
+                            {showReplies ? 'Hide Replies' : 'Show Replies'}
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
                         <Collapse in={showReplies} timeout='auto'>
                             {report.replies.map((reply, index) => (
-                                <div className={classes.marginTop}>
-                                    <Reply key={index} reply={reply} />
+                                <div className={classes.marginTop} key={index}>
+                                    <Reply reply={reply} />
                                 </div>
                             ))}
                         </Collapse>
