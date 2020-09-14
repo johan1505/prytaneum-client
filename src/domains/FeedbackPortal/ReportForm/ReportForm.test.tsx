@@ -116,8 +116,7 @@ describe('create report form', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            // Can't know the date the function was called with
-            expect(spy).toBeCalled();
+            expect(spy).toBeCalledWith({ description: newDescription });
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
@@ -162,7 +161,7 @@ describe('create report form', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            expect(spy).toBeCalled();
+            expect(spy).toBeCalledWith({ description: newDescription });
             jest.runAllTimers();
 
             await ReactTestUtils.act(async () => {
@@ -208,7 +207,6 @@ describe('create report form', () => {
                 '#reportDescription'
             ) as HTMLInputElement;
             expect(reportDescriptionNode.value).toBe('');
-
             ReactTestUtils.act(() => {
                 ReactTestUtils.Simulate.change(reportDescriptionNode, {
                     target: ({
@@ -263,10 +261,13 @@ describe('create report form', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-            // Can't tell with what date it is called
-            expect(spy).toBeCalled();
+            expect(spy).toBeCalledWith(
+                {
+                    description: newDescription,
+                },
+                townhallId
+            );
             jest.runAllTimers();
-
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);
             });
@@ -312,8 +313,12 @@ describe('create report form', () => {
                     new MouseEvent('click', { bubbles: true })
                 );
             });
-
-            expect(spy).toBeCalled();
+            expect(spy).toBeCalledWith(
+                {
+                    description: newDescription,
+                },
+                townhallId
+            );
             jest.runAllTimers();
             await ReactTestUtils.act(async () => {
                 await Promise.allSettled(spy.mock.results);

@@ -22,17 +22,9 @@ describe('#FeedbackReports', () => {
             description: faker.lorem.paragraphs(),
         };
 
-        const date = new Date().toISOString();
-
         it('should reject the feedback report because of missing description', async () => {
-            await expect(API.createFeedbackReport({}, date)).rejects.toThrow(
+            await expect(API.createFeedbackReport({})).rejects.toThrow(
                 errors.fieldError()
-            );
-            expect(axios.post).not.toHaveBeenCalled();
-        });
-        it('should reject the feedback report because of missing date', async () => {
-            await expect(API.createFeedbackReport(form, '')).rejects.toThrow(
-                errors.internalError()
             );
             expect(axios.post).not.toHaveBeenCalled();
         });
@@ -46,7 +38,7 @@ describe('#FeedbackReports', () => {
             );
             // .resolves makes Jest wait for the mocked API call to resolve
             // .toBe is the expected value returned from the mocked API call
-            await expect(API.createFeedbackReport(form, date)).resolves.toBe(
+            await expect(API.createFeedbackReport(form)).resolves.toBe(
                 resolvedValue
             );
             // .toHaveBeenCalledWith ensures that the mocked API call function was called with specific arguments (endpoint and body).
@@ -54,7 +46,6 @@ describe('#FeedbackReports', () => {
                 '/api/feedback/create-report',
                 {
                     ...form,
-                    date,
                 }
             );
         });
@@ -166,40 +157,29 @@ describe('#BugReports', () => {
             description: 'This is a bug report',
         };
         const townhallId = faker.random.alphaNumeric(12);
-        const date = new Date().toISOString();
 
         it('should reject the bug report since form body is not provided', async () => {
-            await expect(
-                API.createBugReport({}, date, townhallId)
-            ).rejects.toThrow(errors.fieldError());
+            await expect(API.createBugReport({}, townhallId)).rejects.toThrow(
+                errors.fieldError()
+            );
             expect(axios.post).not.toHaveBeenCalled();
         });
-
         it('should reject the bug report since townhallId is not provided', async () => {
-            await expect(API.createBugReport(form, date, '')).rejects.toThrow(
+            await expect(API.createBugReport(form, '')).rejects.toThrow(
                 errors.internalError()
             );
             expect(axios.post).not.toHaveBeenCalled();
         });
-
-        it('should reject the bug report since date is not provided', async () => {
-            await expect(API.createBugReport(form, '', '')).rejects.toThrow(
-                errors.internalError()
-            );
-            expect(axios.post).not.toHaveBeenCalled();
-        });
-
         it('should create a bug report', async () => {
             const resolvedValue = { status: 200 };
             (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
                 resolvedValue
             );
-            await expect(
-                API.createBugReport(form, date, townhallId)
-            ).resolves.toBe(resolvedValue);
+            await expect(API.createBugReport(form, townhallId)).resolves.toBe(
+                resolvedValue
+            );
             expect(axios.post).toHaveBeenCalledWith('/api/bugs/create-report', {
                 ...form,
-                date,
                 townhallId,
             });
         });
@@ -354,69 +334,49 @@ describe('#reply to report', () => {
     const _id = faker.random.alphaNumeric(12);
     it('should reject reply to report. Missing report Id', async () => {
         await expect(
-            API.replyToReport(
-                '',
-                faker.lorem.paragraph(),
-                faker.date.past().toISOString(),
-                'feedback'
-            )
+            API.replyToReport('', faker.lorem.paragraph(), 'feedback')
         ).rejects.toThrow(errors.internalError());
         expect(axios.post).not.toHaveBeenCalled();
     });
     it('should reject reply to report. Missing reply content', async () => {
-        await expect(
-            API.replyToReport(_id, '', faker.date.past().toISOString(), 'bugs')
-        ).rejects.toThrow(errors.fieldError());
-        expect(axios.post).not.toHaveBeenCalled();
-    });
-    it('should reject reply to report. Missing date', async () => {
-        await expect(
-            API.replyToReport(_id, faker.lorem.paragraph(), '', 'feedback')
-        ).rejects.toThrow(errors.internalError());
+        await expect(API.replyToReport(_id, '', 'bugs')).rejects.toThrow(
+            errors.fieldError()
+        );
         expect(axios.post).not.toHaveBeenCalled();
     });
     it('should reject reply to report. Missing report type', async () => {
         await expect(
-            API.replyToReport(
-                _id,
-                faker.lorem.paragraph(),
-                faker.date.past().toISOString(),
-                ''
-            )
+            API.replyToReport(_id, faker.lorem.paragraph(), '')
         ).rejects.toThrow(errors.internalError());
         expect(axios.post).not.toHaveBeenCalled();
     });
     it('should submit reply to feedback report', async () => {
         const replyContent = faker.lorem.paragraph();
-        const repliedDate = faker.date.past().toISOString();
         const resolvedValue = { status: 200 };
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
             resolvedValue
         );
         await expect(
-            API.replyToReport(_id, replyContent, repliedDate, 'feedback')
+            API.replyToReport(_id, replyContent, 'feedback')
         ).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith(
             `/api/feedback/replyTo/${_id}`,
             {
                 replyContent,
-                repliedDate,
             }
         );
     });
     it('should submit reply to bug report', async () => {
         const replyContent = faker.lorem.paragraph();
-        const repliedDate = faker.date.past().toISOString();
         const resolvedValue = { status: 200 };
         (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
             resolvedValue
         );
         await expect(
-            API.replyToReport(_id, replyContent, repliedDate, 'bugs')
+            API.replyToReport(_id, replyContent, 'bugs')
         ).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith(`/api/bugs/replyTo/${_id}`, {
             replyContent,
-            repliedDate,
         });
     });
 });

@@ -8,15 +8,12 @@ import {
 } from '../types';
 
 // Feedback reports API functions
-export async function createFeedbackReport(form: FeedbackForm, date: string) {
+export async function createFeedbackReport(form: FeedbackForm) {
     const { description } = form;
     if (!description) {
         throw errors.fieldError();
     }
-    if (!date) {
-        throw errors.internalError();
-    }
-    const body = { date, description };
+    const body = { description };
     return axios.post<unknown>('/api/feedback/create-report', body);
 }
 
@@ -67,22 +64,18 @@ export async function deleteFeedbackReport(_id: string) {
 }
 
 // Bug reports API functions
-export async function createBugReport(
-    form: BugReportForm,
-    date: string,
-    townhallId: string
-) {
+export async function createBugReport(form: BugReportForm, townhallId: string) {
     const { description } = form;
 
     if (!description) {
         throw errors.fieldError();
     }
 
-    if (!date || !townhallId) {
+    if (!townhallId) {
         throw errors.internalError();
     }
 
-    const body = { date, description, townhallId };
+    const body = { description, townhallId };
     return axios.post<unknown>('/api/bugs/create-report', body);
 }
 
@@ -148,10 +141,9 @@ export async function updateReportResolvedStatus(
 export async function replyToReport(
     _id: string,
     replyContent: string,
-    repliedDate: string,
     reportType: 'feedback' | 'bugs'
 ) {
-    if (!_id || !repliedDate || !reportType) {
+    if (!_id || !reportType) {
         throw errors.internalError();
     }
     if (!replyContent) {
@@ -160,7 +152,6 @@ export async function replyToReport(
 
     const body = {
         replyContent,
-        repliedDate,
     };
 
     return axios.post(`/api/${reportType}/replyTo/${_id}`, body);

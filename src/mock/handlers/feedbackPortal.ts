@@ -24,9 +24,7 @@ const makeBugReports = (n: number) => {
 export default [
     // Feedback reports
     rest.post('/api/feedback/create-report', (req, res, ctx) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { date, description } = req.body as {
-            date: string;
+        const { description } = req.body as {
             description: string;
         };
         if (description === 'fail') {
@@ -90,10 +88,8 @@ export default [
         const { _id } = req.params as {
             _id: string;
         };
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { replyContent, repliedDate } = req.body as {
+        const { replyContent } = req.body as {
             replyContent: string;
-            repliedDate: string;
         };
 
         if (replyContent === 'fail') {
@@ -105,8 +101,7 @@ export default [
     // Bug reports
     rest.post('/api/bugs/create-report', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { date, description, townhallId } = req.body as {
-            date: string;
+        const { description, townhallId } = req.body as {
             description: string;
             townhallId: string;
         };
@@ -116,7 +111,6 @@ export default [
         return res(ctx.status(200));
     }),
 
-    // TODO: Return fake bug reports after David review PR
     rest.get('/api/bugs/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
@@ -170,10 +164,8 @@ export default [
         const { _id } = req.params as {
             _id: string;
         };
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { replyContent, repliedDate } = req.body as {
+        const { replyContent } = req.body as {
             replyContent: string;
-            repliedDate: string;
         };
 
         if (replyContent === 'fail') {

@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import faker from 'faker';
 
 import Component from '.';
 import { makeReply } from '../reportMaker.mock';

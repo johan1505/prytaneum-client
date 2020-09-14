@@ -58,13 +58,11 @@ export default function FormBase({
         Bug: EndpointFunctions<BugReportForm>;
     } = {
         Feedback: {
-            create: (form: FeedbackForm) =>
-                createFeedbackReport(form, new Date().toISOString()),
+            create: (form: FeedbackForm) => createFeedbackReport(form),
             update: (form: FeedbackForm) => updateFeedbackReport(form),
         },
         Bug: {
-            create: (form: BugReportForm) =>
-                createBugReport(form, new Date().toISOString(), townhallId),
+            create: (form: BugReportForm) => createBugReport(form, townhallId),
             update: (form: BugReportForm) => updateBugReport(form),
         },
     };

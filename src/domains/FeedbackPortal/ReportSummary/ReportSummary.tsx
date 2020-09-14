@@ -116,13 +116,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
     };
 
     const replyToAPIRequest = React.useCallback(
-        () =>
-            replyToReport(
-                report._id,
-                replyContent,
-                new Date().toISOString(),
-                APIDict[report.type]
-            ),
+        () => replyToReport(report._id, replyContent, APIDict[report.type]),
         [report, replyContent]
     );
 
