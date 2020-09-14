@@ -35,7 +35,6 @@ export default [
         return res(ctx.status(200));
     }),
 
-    // TODO: Return fake feedback reports after David reviews PR
     rest.get('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
@@ -73,6 +72,33 @@ export default [
         const { _id } = req.body as {
             _id: string;
         };
+        return res(ctx.status(200));
+    }),
+
+    rest.post('/api/feedback/updateResolvedStatus/:id', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id } = req.params as {
+            _id: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { resolvedStatus } = req.body as { resolvedStatus: boolean };
+        return res(ctx.status(200));
+    }),
+
+    rest.post('/api/feedback/replyTo/:id', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id } = req.params as {
+            _id: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { replyContent, repliedDate } = req.body as {
+            replyContent: string;
+            repliedDate: string;
+        };
+
+        if (replyContent === 'fail') {
+            return res(ctx.status(400));
+        }
         return res(ctx.status(200));
     }),
 
@@ -127,6 +153,32 @@ export default [
         const { _id } = req.body as {
             _id: string;
         };
+        return res(ctx.status(200));
+    }),
+    rest.post('/api/bugs/updateResolvedStatus/:id', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id } = req.params as {
+            _id: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { resolvedStatus } = req.body as { resolvedStatus: boolean };
+        return res(ctx.status(200));
+    }),
+
+    rest.post('/api/bugs/replyTo/:id', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id } = req.params as {
+            _id: string;
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { replyContent, repliedDate } = req.body as {
+            replyContent: string;
+            repliedDate: string;
+        };
+
+        if (replyContent === 'fail') {
+            return res(ctx.status(400));
+        }
         return res(ctx.status(200));
     }),
 ];
