@@ -133,14 +133,14 @@ export async function deleteBugReport(_id: string) {
 
 export async function updateReportResolvedStatus(
     _id: string,
-    resolved: 'true' | 'false',
+    resolved: boolean,
     reportType: 'feedback' | 'bugs'
 ) {
-    if (!_id || !resolved || !reportType) {
+    if (!_id || typeof resolved !== 'boolean' || !reportType) {
         throw errors.internalError();
     }
     const body = {
-        resolvedStatus: resolved === 'true',
+        resolvedStatus: resolved,
     };
     return axios.post(`/api/${reportType}/updateResolvedStatus/${_id}`, body);
 }
