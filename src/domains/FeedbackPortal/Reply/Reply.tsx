@@ -22,18 +22,18 @@ export default function Reply({ reply }: Props) {
                     spacing={3}
                 >
                     <Grid item>
-                        <Typography variant='h5'>
+                        <Typography variant='h6'>
                             {reply.repliedBy._id}
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Typography variant='h6'>
+                        <Typography variant='subtitle1'>
                             {formatDate(new Date(reply.repliedDate))}
                         </Typography>
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <Typography variant='body1' paragraph>
+                    <Typography variant='body2' paragraph>
                         {reply.content}
                     </Typography>
                 </Grid>
