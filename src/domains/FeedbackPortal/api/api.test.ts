@@ -16,7 +16,7 @@ afterEach(() => {
     jest.restoreAllMocks();
 });
 
-describe('#FeedbackRports', () => {
+describe('#FeedbackReports', () => {
     describe('#create', () => {
         const form = {
             description: faker.lorem.paragraphs(),
@@ -160,7 +160,7 @@ describe('#FeedbackRports', () => {
     });
 });
 
-describe('#BugRports', () => {
+describe('#BugReports', () => {
     describe('#create', () => {
         const form = {
             description: 'This is a bug report',
@@ -294,6 +294,129 @@ describe('#BugRports', () => {
             expect(axios.post).toHaveBeenCalledWith('/api/bugs/delete-report', {
                 _id,
             });
+        });
+    });
+});
+
+describe('#update resolved status', () => {
+    const _id = faker.random.alphaNumeric(12);
+    it('should reject update of resolved status. Missing report Id', async () => {
+        await expect(
+            API.updateReportResolvedStatus('', true, 'feedback')
+        ).rejects.toThrow(errors.internalError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should reject update of resolved status. Missing resolved value', async () => {
+        await expect(
+            API.updateReportResolvedStatus(_id, undefined, 'bug')
+        ).rejects.toThrow(errors.internalError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should reject update of resolved status. Missing report type', async () => {
+        await expect(
+            API.updateReportResolvedStatus(_id, false, '') // eslint-disable-line
+        ).rejects.toThrow(errors.internalError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should update the resolved status of a bug report', async () => {
+        const resolvedValue = { status: 200 };
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
+        await expect(
+            API.updateReportResolvedStatus(_id, true, 'bugs')
+        ).resolves.toBe(resolvedValue);
+        expect(axios.post).toHaveBeenCalledWith(
+            `/api/bugs/updateResolvedStatus/${_id}`,
+            {
+                resolvedStatus: true,
+            }
+        );
+    });
+    it('should update the resolved status of a feedback report', async () => {
+        const resolvedValue = { status: 200 };
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
+        await expect(
+            API.updateReportResolvedStatus(_id, false, 'feedback')
+        ).resolves.toBe(resolvedValue);
+        expect(axios.post).toHaveBeenCalledWith(
+            `/api/feedback/updateResolvedStatus/${_id}`,
+            {
+                resolvedStatus: false,
+            }
+        );
+    });
+});
+
+describe('#reply to report', () => {
+    const _id = faker.random.alphaNumeric(12);
+    it('should reject reply to report. Missing report Id', async () => {
+        await expect(
+            API.replyToReport(
+                '',
+                faker.lorem.paragraph(),
+                faker.date.past().toISOString(),
+                'feedback'
+            )
+        ).rejects.toThrow(errors.internalError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should reject reply to report. Missing reply content', async () => {
+        await expect(
+            API.replyToReport(_id, '', faker.date.past().toISOString(), 'bugs')
+        ).rejects.toThrow(errors.fieldError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should reject reply to report. Missing date', async () => {
+        await expect(
+            API.replyToReport(_id, faker.lorem.paragraph(), '', 'feedback')
+        ).rejects.toThrow(errors.internalError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should reject reply to report. Missing report type', async () => {
+        await expect(
+            API.replyToReport(
+                _id,
+                faker.lorem.paragraph(),
+                faker.date.past().toISOString(),
+                ''
+            )
+        ).rejects.toThrow(errors.internalError());
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+    it('should submit reply to feedback report', async () => {
+        const replyContent = faker.lorem.paragraph();
+        const repliedDate = faker.date.past().toISOString();
+        const resolvedValue = { status: 200 };
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
+        await expect(
+            API.replyToReport(_id, replyContent, repliedDate, 'feedback')
+        ).resolves.toBe(resolvedValue);
+        expect(axios.post).toHaveBeenCalledWith(
+            `/api/feedback/replyTo/${_id}`,
+            {
+                replyContent,
+                repliedDate,
+            }
+        );
+    });
+    it('should submit reply to bug report', async () => {
+        const replyContent = faker.lorem.paragraph();
+        const repliedDate = faker.date.past().toISOString();
+        const resolvedValue = { status: 200 };
+        (axios as jest.Mocked<typeof axios>).post.mockResolvedValue(
+            resolvedValue
+        );
+        await expect(
+            API.replyToReport(_id, replyContent, repliedDate, 'bugs')
+        ).resolves.toBe(resolvedValue);
+        expect(axios.post).toHaveBeenCalledWith(`/api/bugs/replyTo/${_id}`, {
+            replyContent,
+            repliedDate,
         });
     });
 });
