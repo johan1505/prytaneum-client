@@ -161,6 +161,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                         <Grid item>Unresolved</Grid>
                         <Grid item>
                             <Switch
+                                id='resolvedStatusSwitch'
                                 checked={resolvedStatus}
                                 onChange={() => {
                                     setResolvedStatus(!resolvedStatus);
@@ -240,7 +241,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                 <Grid item container>
                     <Grid item xs={12}>
                         <Button
-                            id='showReplies'
+                            id='replyButton'
                             fullWidth
                             variant='contained'
                             color='primary'
@@ -307,7 +308,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                 <Grid item container>
                     <Grid item xs={12}>
                         <Button
-                            id='showReplies'
+                            id='showRepliesButton'
                             fullWidth
                             variant='contained'
                             color='primary'

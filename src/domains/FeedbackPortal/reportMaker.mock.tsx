@@ -31,7 +31,7 @@ export function makeFeedbackReport(): FeedbackReport {
         submitterId: faker.random.alphaNumeric(12),
         type: 'Feedback',
         replies: makeReplies(3),
-        resolved: faker.random.boolean(),
+        resolved: false,
     };
 }
 
