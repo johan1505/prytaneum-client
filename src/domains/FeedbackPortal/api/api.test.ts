@@ -307,7 +307,7 @@ describe('#update resolved status', () => {
             API.updateReportResolvedStatus(_id, true, 'bugs')
         ).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith(
-            `/api/bugs/updateResolvedStatus/${_id}`,
+            `/api/bugs/update-resolved-status/${_id}`,
             {
                 resolvedStatus: true,
             }
@@ -322,7 +322,7 @@ describe('#update resolved status', () => {
             API.updateReportResolvedStatus(_id, false, 'feedback')
         ).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith(
-            `/api/feedback/updateResolvedStatus/${_id}`,
+            `/api/feedback/update-resolved-status/${_id}`,
             {
                 resolvedStatus: false,
             }
@@ -360,7 +360,7 @@ describe('#reply to report', () => {
             API.replyToReport(_id, replyContent, 'feedback')
         ).resolves.toBe(resolvedValue);
         expect(axios.post).toHaveBeenCalledWith(
-            `/api/feedback/replyTo/${_id}`,
+            `/api/feedback/reply-to/${_id}`,
             {
                 replyContent,
             }
@@ -375,7 +375,7 @@ describe('#reply to report', () => {
         await expect(
             API.replyToReport(_id, replyContent, 'bugs')
         ).resolves.toBe(resolvedValue);
-        expect(axios.post).toHaveBeenCalledWith(`/api/bugs/replyTo/${_id}`, {
+        expect(axios.post).toHaveBeenCalledWith(`/api/bugs/reply-to/${_id}`, {
             replyContent,
         });
     });

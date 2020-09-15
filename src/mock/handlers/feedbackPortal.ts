@@ -73,7 +73,7 @@ export default [
         return res(ctx.status(200));
     }),
 
-    rest.post('/api/feedback/updateResolvedStatus/:id', (req, res, ctx) => {
+    rest.post('/api/feedback/update-resolved-status/:id', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id } = req.params as {
             _id: string;
@@ -83,7 +83,7 @@ export default [
         return res(ctx.status(200));
     }),
 
-    rest.post('/api/feedback/replyTo/:id', (req, res, ctx) => {
+    rest.post('/api/feedback/reply-to/:id', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id } = req.params as {
             _id: string;
@@ -149,7 +149,7 @@ export default [
         };
         return res(ctx.status(200));
     }),
-    rest.post('/api/bugs/updateResolvedStatus/:id', (req, res, ctx) => {
+    rest.post('/api/bugs/update-resolved-status/:id', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id } = req.params as {
             _id: string;
@@ -159,7 +159,7 @@ export default [
         return res(ctx.status(200));
     }),
 
-    rest.post('/api/bugs/replyTo/:id', (req, res, ctx) => {
+    rest.post('/api/bugs/reply-to/:id', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id } = req.params as {
             _id: string;
