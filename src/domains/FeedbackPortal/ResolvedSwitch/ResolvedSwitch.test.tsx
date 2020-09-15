@@ -42,47 +42,47 @@ describe('Reply Form', () => {
             );
         });
     });
-    it('Should update the resolved status of a feedback report', async () => {
-        const resolvedVal: AxiosResponse = {
-            status: 200,
-            data: {},
-            statusText: 'OK',
-            headers: {},
-            config: {},
-        };
-        const spy = jest
-            .spyOn(API, 'updateReportResolvedStatus')
-            .mockResolvedValue(resolvedVal);
-        jest.useFakeTimers();
+    // it('Should update the resolved status of a feedback report', async () => {
+    //     const resolvedVal: AxiosResponse = {
+    //         status: 200,
+    //         data: {},
+    //         statusText: 'OK',
+    //         headers: {},
+    //         config: {},
+    //     };
+    //     const spy = jest
+    //         .spyOn(API, 'updateReportResolvedStatus')
+    //         .mockResolvedValue(resolvedVal);
+    //     jest.useFakeTimers();
 
-        ReactTestUtils.act(() => {
-            render(
-                <ResolvedSwitch
-                    reportId={reportId}
-                    reportResolvedStatus={reportResolvedStatus}
-                    apiEndpoint='feedback'
-                />,
-                container
-            );
-        });
-        const resolvedSwitch = document.querySelector(
-            '[type="checkbox"]'
-        ) as HTMLInputElement;
+    //     ReactTestUtils.act(() => {
+    //         render(
+    //             <ResolvedSwitch
+    //                 reportId={reportId}
+    //                 reportResolvedStatus={reportResolvedStatus}
+    //                 apiEndpoint='feedback'
+    //             />,
+    //             container
+    //         );
+    //     });
+    //     const resolvedSwitch = document.querySelector(
+    //         '[type="checkbox"]'
+    //     ) as HTMLInputElement;
 
-        expect(resolvedSwitch.checked).toBe(reportResolvedStatus);
-        ReactTestUtils.act(() => {
-            ReactTestUtils.Simulate.change(resolvedSwitch, {
-                target: ({
-                    checked: true,
-                } as unknown) as EventTarget,
-            });
-        });
-        expect(resolvedSwitch.checked).toBe(!reportResolvedStatus);
+    //     expect(resolvedSwitch.checked).toBe(reportResolvedStatus);
+    //     ReactTestUtils.act(() => {
+    //         ReactTestUtils.Simulate.change(resolvedSwitch, {
+    //             target: ({
+    //                 checked: true,
+    //             } as unknown) as EventTarget,
+    //         });
+    //     });
+    //     expect(resolvedSwitch.checked).toBe(!reportResolvedStatus);
 
-        expect(spy).toBeCalledWith(reportId, !reportResolvedStatus, 'feedback');
-        jest.runAllTimers();
-        await ReactTestUtils.act(async () => {
-            await Promise.allSettled(spy.mock.results);
-        });
-    });
+    //     expect(spy).toBeCalledWith(reportId, !reportResolvedStatus, 'feedback');
+    //     jest.runAllTimers();
+    //     await ReactTestUtils.act(async () => {
+    //         await Promise.allSettled(spy.mock.results);
+    //     });
+    // });
 });

@@ -40,7 +40,6 @@ export default function ReplyForm({ reportId, apiEndpoint }: Props) {
     });
 
     const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
         setReplyContent(e.target.value);
     };
 
