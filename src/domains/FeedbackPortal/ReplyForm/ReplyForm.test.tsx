@@ -81,6 +81,7 @@ describe('Reply Form', () => {
         const replyTextField = document.querySelector(
             '#replyContent'
         ) as HTMLInputElement;
+        expect(replyTextField.value).toBe('');
 
         ReactTestUtils.act(() => {
             ReactTestUtils.Simulate.change(replyTextField, {
@@ -91,7 +92,7 @@ describe('Reply Form', () => {
         });
         expect(replyTextField.value).toBe(replyContent);
     });
-    // TODO: The following two tests do not work. If the Dialog in ReplyForm is taken out, the test pass. Issue is related to how the Dialog is being used.
+    // TODO: The following two tests do not work. However, if the Dialog in ReplyForm is taken out, the tests then pass. The Issue is probably related to the usage of jest.runAllTimes and the Dialog component.
     // it('Should submit a reply to a feedback report summary and succeed', async () => {
     //     const replyContent = faker.lorem.paragraph();
     //     const resolvedVal: AxiosResponse = {
@@ -126,16 +127,21 @@ describe('Reply Form', () => {
     //         '#replyContent'
     //     ) as HTMLInputElement;
 
-    //     const submitReplyButton = document.querySelector(
-    //         '#submitReplyButton'
-    //     ) as HTMLButtonElement;
-
+    //     // Input the content of the reply
     //     ReactTestUtils.act(() => {
     //         ReactTestUtils.Simulate.change(replyTextField, {
     //             target: ({
     //                 value: replyContent,
     //             } as unknown) as EventTarget,
     //         });
+    //     });
+
+    //     const submitReplyButton = document.querySelector(
+    //         '#submitReplyButton'
+    //     ) as HTMLButtonElement;
+
+    //     // Submit the reply
+    //     ReactTestUtils.act(() => {
     //         submitReplyButton.dispatchEvent(
     //             new MouseEvent('click', { bubbles: true })
     //         );
