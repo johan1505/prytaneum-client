@@ -10,13 +10,13 @@ import { updateReportResolvedStatus } from '../api';
 interface SummaryProps {
     reportId: string;
     reportResolvedStatus: boolean;
-    apiEndpoint: 'feedback' | 'bugs';
+    reportType: 'feedback' | 'bugs';
 }
 
 export default function ReportSummary({
     reportId,
     reportResolvedStatus,
-    apiEndpoint,
+    reportType,
 }: SummaryProps) {
     const [resolvedStatus, setResolvedStatus] = React.useState(
         reportResolvedStatus
@@ -24,7 +24,7 @@ export default function ReportSummary({
     const [snack] = useSnack();
 
     const updateResolvedAPIRequest = React.useCallback(
-        () => updateReportResolvedStatus(reportId, resolvedStatus, apiEndpoint),
+        () => updateReportResolvedStatus(reportId, resolvedStatus, reportType),
         [resolvedStatus]
     );
 

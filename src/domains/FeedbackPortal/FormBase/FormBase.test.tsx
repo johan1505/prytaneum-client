@@ -38,7 +38,7 @@ describe('CreateReportRequest', () => {
                 <FormBase
                     report={dummyFeedbackReport}
                     onSuccess={onSuccess}
-                    reportType='Feedback'
+                    reportType='feedback'
                     submitType='update'
                 />,
                 container
@@ -55,7 +55,7 @@ describe('CreateReportRequest', () => {
                 <FormBase
                     onSuccess={onSuccess}
                     report={dummyFeedbackReport}
-                    reportType='Feedback'
+                    reportType='feedback'
                     submitType='update'
                 />,
                 container
@@ -97,7 +97,7 @@ describe('CreateReportRequest', () => {
             render(
                 <FormBase
                     onSuccess={onSuccess}
-                    reportType='Feedback'
+                    reportType='feedback'
                     submitType='update'
                     report={dummyFeedbackReport}
                 />,
@@ -146,7 +146,7 @@ describe('CreateReportRequest', () => {
             render(
                 <FormBase
                     onSuccess={onSuccess}
-                    reportType='Feedback'
+                    reportType='feedback'
                     submitType='update'
                     report={dummyFeedbackReport}
                 />,

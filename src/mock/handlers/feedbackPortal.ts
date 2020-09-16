@@ -33,6 +33,26 @@ export default [
         return res(ctx.status(200));
     }),
 
+    rest.get('/api/feedback/get-reports', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const page = req.url.searchParams.get('page');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const sortByDate = req.url.searchParams.get('sortByDate');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const resolved = req.url.searchParams.get('resolved');
+
+        if (!page) {
+            return res(ctx.status(400));
+        }
+        return res(
+            ctx.status(200),
+            ctx.json({
+                reports: makeFeedbackReports(10),
+                count: 90,
+            })
+        );
+    }),
+
     rest.get('/api/feedback/get-reports/:submitterId', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
@@ -109,6 +129,26 @@ export default [
             return res(ctx.status(400));
         }
         return res(ctx.status(200));
+    }),
+
+    rest.get('/api/bugs/get-reports', (req, res, ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const page = req.url.searchParams.get('page');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const sortByDate = req.url.searchParams.get('sortByDate');
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const resolved = req.url.searchParams.get('resolved');
+
+        if (!page) {
+            return res(ctx.status(400));
+        }
+        return res(
+            ctx.status(200),
+            ctx.json({
+                reports: makeBugReports(10),
+                count: 90,
+            })
+        );
     }),
 
     rest.get('/api/bugs/get-reports/:submitterId', (req, res, ctx) => {

@@ -30,7 +30,7 @@ interface DefaultProps {
 
 interface Props {
     report: Report;
-    reportType: 'Feedback' | 'Bug';
+    reportType: 'feedback' | 'bugs';
     submitType: 'create' | 'update';
     onSuccess?: (report: Report) => void;
     onFailure?: () => void;
@@ -54,14 +54,14 @@ export default function FormBase({
     }
     // This dictionary is used to avoid having to create 4 callbacks and 4 submitRequests
     const endpoints: {
-        Feedback: EndpointFunctions<FeedbackForm>;
-        Bug: EndpointFunctions<BugReportForm>;
+        feedback: EndpointFunctions<FeedbackForm>;
+        bugs: EndpointFunctions<BugReportForm>;
     } = {
-        Feedback: {
+        feedback: {
             create: (form: FeedbackForm) => createFeedbackReport(form),
             update: (form: FeedbackForm) => updateFeedbackReport(form),
         },
-        Bug: {
+        bugs: {
             create: (form: BugReportForm) => createBugReport(form, townhallId),
             update: (form: BugReportForm) => updateBugReport(form),
         },

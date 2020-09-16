@@ -27,16 +27,18 @@ import {
 } from '../api';
 import { FeedbackReport, BugReport } from '../types';
 
-type ReportTypes = 'Feedback' | 'Bug' | '';
+type ReportTypes = 'feedback' | 'bugs' | '';
 type SortingTypes = 'true' | 'false' | '';
 type Report = FeedbackReport | BugReport;
 
-const ReportOptions = ['Feedback', 'Bug'];
+const ReportOptions = [
+    { name: 'Feedback', value: 'feedback' },
+    { name: 'Bug', value: 'bugs' },
+];
 const sortingOptions = [
     { name: 'Ascending', value: 'true' },
     { name: 'Descending', value: 'false' },
 ];
-
 // TODO: auth
 const user = {
     _id: '123456789',
@@ -71,7 +73,7 @@ export default function ReportHistory() {
 
     const getEndpoints = (reportTypeParam: ReportTypes) => {
         switch (reportTypeParam) {
-            case 'Feedback':
+            case 'feedback':
                 return (
                     pageNumber: number,
                     sorting: SortingTypes,
@@ -82,7 +84,7 @@ export default function ReportHistory() {
                         sorting,
                         submitterId
                     );
-            case 'Bug':
+            case 'bugs':
                 return (
                     pageNumber: number,
                     sorting: SortingTypes,
@@ -193,10 +195,10 @@ export default function ReportHistory() {
 
                                         {ReportOptions.map((ReportOption) => (
                                             <MenuItem
-                                                key={ReportOption}
-                                                value={ReportOption}
+                                                key={ReportOption.name}
+                                                value={ReportOption.value}
                                             >
-                                                {ReportOption}
+                                                {ReportOption.name}
                                             </MenuItem>
                                         ))}
                                     </Select>
@@ -231,7 +233,6 @@ export default function ReportHistory() {
                             </Grid>
                             <Grid item>
                                 <LoadingButton
-                                    // loading={isLoadingFeedback || isLoadingBug}
                                     loading={isLoading}
                                     component={
                                         <Button

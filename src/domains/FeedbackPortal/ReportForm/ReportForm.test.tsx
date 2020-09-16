@@ -36,7 +36,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Feedback'
+                        reportType='feedback'
                     />,
                     container
                 );
@@ -51,7 +51,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Feedback'
+                        reportType='feedback'
                     />,
                     container
                 );
@@ -92,7 +92,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Feedback'
+                        reportType='feedback'
                     />,
                     container
                 );
@@ -137,7 +137,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Feedback'
+                        reportType='feedback'
                     />,
                     container
                 );
@@ -180,7 +180,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Bug'
+                        reportType='bugs'
                         townhallId={townhallId}
                     />,
                     container
@@ -196,7 +196,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Bug'
+                        reportType='bugs'
                         townhallId={townhallId}
                     />,
                     container
@@ -237,7 +237,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Bug'
+                        reportType='bugs'
                         townhallId={townhallId}
                     />,
                     container
@@ -289,7 +289,7 @@ describe('create report form', () => {
                         title={faker.random.word()}
                         mainDescription={faker.lorem.paragraph()}
                         icon={<></>}
-                        reportType='Bug'
+                        reportType='bugs'
                         townhallId={townhallId}
                     />,
                     container

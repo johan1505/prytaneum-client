@@ -38,7 +38,7 @@ describe('Reply Form', () => {
                 <ResolvedSwitch
                     reportId={reportId}
                     reportResolvedStatus={reportResolvedStatus}
-                    apiEndpoint='feedback'
+                    reportType='feedback'
                 />,
                 container
             );
@@ -50,7 +50,7 @@ describe('Reply Form', () => {
                 <ResolvedSwitch
                     reportId={reportId}
                     reportResolvedStatus={reportResolvedStatus}
-                    apiEndpoint='feedback'
+                    reportType='feedback'
                 />,
                 container
             );
@@ -78,7 +78,7 @@ describe('Reply Form', () => {
                 <ResolvedSwitch
                     reportId={reportId}
                     reportResolvedStatus={reportResolvedStatus}
-                    apiEndpoint='feedback'
+                    reportType='feedback'
                 />,
                 container
             );
@@ -121,7 +121,7 @@ describe('Reply Form', () => {
                 <ResolvedSwitch
                     reportId={reportId}
                     reportResolvedStatus={reportResolvedStatus}
-                    apiEndpoint='bugs'
+                    reportType='bugs'
                 />,
                 container
             );

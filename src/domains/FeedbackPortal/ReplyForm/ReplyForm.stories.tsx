@@ -11,7 +11,7 @@ export function ReplyForm() {
         <Container maxWidth='sm'>
             <Component
                 reportId={faker.random.alphaNumeric(12)}
-                apiEndpoint='feedback'
+                reportType='feedback'
             />
         </Container>
     );

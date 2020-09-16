@@ -12,16 +12,16 @@ import { replyToReport } from '../api';
 
 interface Props {
     reportId: string;
-    apiEndpoint: 'feedback' | 'bugs';
+    reportType: 'feedback' | 'bugs';
 }
 
-export default function ReplyForm({ reportId, apiEndpoint }: Props) {
+export default function ReplyForm({ reportId, reportType }: Props) {
     const [showDialog, setShowDialog] = React.useState(false);
     const [replyContent, setReplyContent] = React.useState('');
     const [snack] = useSnack();
 
     const replyToAPIRequest = React.useCallback(
-        () => replyToReport(reportId, replyContent, apiEndpoint),
+        () => replyToReport(reportId, replyContent, reportType),
         [replyContent]
     );
 

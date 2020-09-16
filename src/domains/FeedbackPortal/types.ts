@@ -14,7 +14,7 @@ export interface BugReportForm extends ReportForm {
 }
 
 interface User {
-    _id: string
+    _id: string;
 }
 export interface Reply {
     content: string;
@@ -25,7 +25,7 @@ export interface Reply {
 type Report = Required<ReportForm> & {
     date: string;
     submitterId: string;
-    type: 'Feedback' | 'Bug';
+    type: 'feedback' | 'bugs';
     resolved: boolean;
     replies: Reply[];
 };

@@ -31,7 +31,7 @@ describe('Reply Form', () => {
     it('should render reply form ', async () => {
         ReactTestUtils.act(() => {
             render(
-                <ReplyForm reportId={reportId} apiEndpoint='feedback' />,
+                <ReplyForm reportId={reportId} reportType='feedback' />,
                 container
             );
         });
@@ -39,7 +39,7 @@ describe('Reply Form', () => {
     it('Should open reply dialog', async () => {
         ReactTestUtils.act(() => {
             render(
-                <ReplyForm reportId={reportId} apiEndpoint='feedback' />,
+                <ReplyForm reportId={reportId} reportType='feedback' />,
                 container
             );
         });
@@ -64,7 +64,7 @@ describe('Reply Form', () => {
         const replyContent = faker.lorem.paragraph();
         ReactTestUtils.act(() => {
             render(
-                <ReplyForm reportId={reportId} apiEndpoint='feedback' />,
+                <ReplyForm reportId={reportId} reportType='feedback' />,
                 container
             );
         });

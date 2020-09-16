@@ -12,7 +12,7 @@ interface FormProps {
     title: string;
     mainDescription: string;
     icon: JSX.Element;
-    reportType: 'Feedback' | 'Bug';
+    reportType: 'feedback' | 'bugs';
     townhallId?: string;
 }
 

@@ -35,7 +35,7 @@ const makeBaseReport = () => ({
 export function makeFeedbackReport(): FeedbackReport {
     return {
         ...makeBaseReport(),
-        type: 'Feedback',
+        type: 'feedback',
     };
 }
 
@@ -43,6 +43,6 @@ export function makeBugReport(): BugReport {
     return {
         ...makeBaseReport(),
         townhallId: faker.random.alphaNumeric(12),
-        type: 'Bug',
+        type: 'bugs',
     };
 }

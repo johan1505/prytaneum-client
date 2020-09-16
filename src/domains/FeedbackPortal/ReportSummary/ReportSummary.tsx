@@ -71,11 +71,11 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
 
     type deleteFunction = (_id: string) => Promise<AxiosResponse<unknown>>;
     const endpoints: {
-        Feedback: deleteFunction;
-        Bug: deleteFunction;
+        feedback: deleteFunction;
+        bugs: deleteFunction;
     } = {
-        Feedback: (_id: string) => deleteFeedbackReport(_id),
-        Bug: (_id: string) => deleteBugReport(_id),
+        feedback: (_id: string) => deleteFeedbackReport(_id),
+        bugs: (_id: string) => deleteBugReport(_id),
     };
 
     const deleteApiRequest = React.useCallback(
@@ -99,17 +99,12 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
         callBack();
     };
 
-    const APIDict: { Feedback: 'feedback'; Bug: 'bugs' } = {
-        Feedback: 'feedback',
-        Bug: 'bugs',
-    };
-
     function ResolvedSection() {
         return user.isAdmin ? (
             <ResolvedSwitch
                 reportId={report._id}
                 reportResolvedStatus={report.resolved}
-                apiEndpoint={APIDict[report.type]}
+                reportType={report.type}
             />
         ) : (
             <Bold>
@@ -175,10 +170,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
                 />
             </Grid>
             {user.isAdmin && (
-                <ReplyForm
-                    reportId={report._id}
-                    apiEndpoint={APIDict[report.type]}
-                />
+                <ReplyForm reportId={report._id} reportType={report.type} />
             )}
             {report.replies.length > 0 && (
                 <Grid item container>

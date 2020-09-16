@@ -7,6 +7,7 @@ import {
     BugReportForm,
 } from '../types';
 
+type BooleanStringified = 'true' | 'false' | '';
 // Feedback reports API functions
 export async function createFeedbackReport(form: FeedbackForm) {
     const { description } = form;
@@ -17,9 +18,30 @@ export async function createFeedbackReport(form: FeedbackForm) {
     return axios.post<unknown>('/api/feedback/create-report', body);
 }
 
+export async function getFeedbackReports(
+    page: number,
+    sortByDate: BooleanStringified,
+    resolved: BooleanStringified
+) {
+    if (!page || !sortByDate || !resolved) {
+        throw errors.fieldError();
+    }
+    const params = {
+        page,
+        sortByDate,
+        resolved,
+    };
+    return axios.get<{ reports: FeedbackReport[]; count: number }>(
+        '/api/feedback/get-reports',
+        {
+            params,
+        }
+    );
+}
+
 export async function getFeedbackReportsBySubmitter(
     page: number,
-    sortByDate: 'true' | 'false' | '',
+    sortByDate: BooleanStringified,
     submitterId: string
 ) {
     if (!page || !sortByDate) {
@@ -79,9 +101,30 @@ export async function createBugReport(form: BugReportForm, townhallId: string) {
     return axios.post<unknown>('/api/bugs/create-report', body);
 }
 
+export async function getBugReports(
+    page: number,
+    sortByDate: BooleanStringified,
+    resolved: BooleanStringified
+) {
+    if (!page || !sortByDate || !resolved) {
+        throw errors.fieldError();
+    }
+    const params = {
+        page,
+        sortByDate,
+        resolved,
+    };
+    return axios.get<{ reports: BugReport[]; count: number }>(
+        '/api/bugs/get-reports',
+        {
+            params,
+        }
+    );
+}
+
 export async function getBugReportsBySubmitter(
     page: number,
-    sortByDate: 'true' | 'false' | '',
+    sortByDate: BooleanStringified,
     submitterId: string
 ) {
     if (!page || !sortByDate) {
