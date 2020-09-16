@@ -135,7 +135,10 @@ export async function updateReportResolvedStatus(
     const body = {
         resolvedStatus: resolved,
     };
-    return axios.post(`/api/${reportType}/update-resolved-status/${_id}`, body);
+    return axios.post<unknown>(
+        `/api/${reportType}/update-resolved-status/${_id}`,
+        body
+    );
 }
 
 export async function replyToReport(
@@ -154,5 +157,5 @@ export async function replyToReport(
         replyContent,
     };
 
-    return axios.post(`/api/${reportType}/reply-to/${_id}`, body);
+    return axios.post<unknown>(`/api/${reportType}/reply-to/${_id}`, body);
 }
