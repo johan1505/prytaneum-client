@@ -23,27 +23,26 @@ export function makeReplies(numberOfReplies: number) {
     return replies;
 }
 
+const makeBaseReport = () => ({
+    _id: faker.random.alphaNumeric(12),
+    description: faker.lorem.paragraph(),
+    date: faker.date.between(recent, future).toISOString(),
+    submitterId: faker.random.alphaNumeric(12),
+    replies: makeReplies(3),
+    resolved: faker.random.boolean(),
+});
+
 export function makeFeedbackReport(): FeedbackReport {
     return {
-        _id: faker.random.alphaNumeric(12),
-        description: faker.lorem.paragraph(),
-        date: faker.date.between(recent, future).toISOString(),
-        submitterId: faker.random.alphaNumeric(12),
+        ...makeBaseReport(),
         type: 'Feedback',
-        replies: makeReplies(3),
-        resolved: false,
     };
 }
 
 export function makeBugReport(): BugReport {
     return {
-        _id: faker.random.alphaNumeric(12),
-        description: faker.lorem.paragraph(),
-        date: faker.date.between(recent, future).toISOString(),
+        ...makeBaseReport(),
         townhallId: faker.random.alphaNumeric(12),
-        submitterId: faker.random.alphaNumeric(12),
         type: 'Bug',
-        replies: [],
-        resolved: faker.random.boolean(),
     };
 }
