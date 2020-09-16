@@ -19,7 +19,7 @@ export async function createFeedbackReport(form: FeedbackForm) {
 
 export async function getFeedbackReportsBySubmitter(
     page: number,
-    sortByDate: string,
+    sortByDate: 'true' | 'false' | '',
     submitterId: string
 ) {
     if (!page || !sortByDate) {
@@ -81,7 +81,7 @@ export async function createBugReport(form: BugReportForm, townhallId: string) {
 
 export async function getBugReportsBySubmitter(
     page: number,
-    sortByDate: string,
+    sortByDate: 'true' | 'false' | '',
     submitterId: string
 ) {
     if (!page || !sortByDate) {

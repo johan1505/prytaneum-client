@@ -16,6 +16,7 @@ import {
 import Pagination from '@material-ui/lab/Pagination';
 
 import useEndpoint from 'hooks/useEndpoint';
+import useSnack from 'hooks/useSnack';
 import Loader from 'components/Loader';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/FeedbackPortal/ReportList';
@@ -24,25 +25,23 @@ import {
     getFeedbackReportsBySubmitter,
     getBugReportsBySubmitter,
 } from '../api';
-
 import { FeedbackReport, BugReport } from '../types';
 
-const ReportOptions = ['Feedback', 'Bug'];
+type ReportTypes = 'Feedback' | 'Bug' | '';
+type SortingTypes = 'true' | 'false' | '';
+type Report = FeedbackReport | BugReport;
 
+const ReportOptions = ['Feedback', 'Bug'];
 const sortingOptions = [
     { name: 'Ascending', value: 'true' },
     { name: 'Descending', value: 'false' },
 ];
 
-type Report = FeedbackReport | BugReport;
-
 // TODO: auth
 const user = {
     _id: '123456789',
 };
-
 const pageSize = 10;
-
 const useStyles = makeStyles((theme: Theme) => ({
     select: {
         borderColor: theme.palette.common.white,
@@ -52,57 +51,76 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function ReportHistory() {
     const classes = useStyles();
-    const [prevReportType, setPrevReportType] = React.useState('');
-    const [reportType, setReportType] = React.useState('');
-    const [sortingOrder, setSortingOrder] = React.useState('');
+    const [prevReportType, setPrevReportType] = React.useState<ReportTypes>('');
+    const [reportType, setReportType] = React.useState<ReportTypes>('');
+    const [sortingOrder, setSortingOrder] = React.useState<SortingTypes>('');
     const [page, setPage] = React.useState(1);
     const [numOfPages, setNumOfPages] = React.useState(0);
     const [reports, setReports] = React.useState<Report[]>([]);
+    const [snack] = useSnack();
 
-    const handleReportTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        setReportType(e.target.value as string);
+    const handleReportTypeChange = (
+        e: React.ChangeEvent<{ value: unknown }>
+    ) => {
+        setReportType(e.target.value as ReportTypes);
     };
 
     const handleSortingChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-        setSortingOrder(e.target.value as string);
+        setSortingOrder(e.target.value as SortingTypes);
     };
 
-    const feedbackReportsAPIrequest = React.useCallback(
-        () =>
-            // TODO: Replace with user Id
-            getFeedbackReportsBySubmitter(page, sortingOrder, user._id),
-        [page, sortingOrder]
+    const getEndpoints = (reportTypeParam: ReportTypes) => {
+        switch (reportTypeParam) {
+            case 'Feedback':
+                return (
+                    pageNumber: number,
+                    sorting: SortingTypes,
+                    submitterId: string
+                ) =>
+                    getFeedbackReportsBySubmitter(
+                        pageNumber,
+                        sorting,
+                        submitterId
+                    );
+            case 'Bug':
+                return (
+                    pageNumber: number,
+                    sorting: SortingTypes,
+                    submitterId: string
+                ) => getBugReportsBySubmitter(pageNumber, sorting, submitterId);
+            default:
+                return (
+                    pageNumber: number,
+                    sorting: SortingTypes,
+                    submitterId: string
+                ) =>
+                    getFeedbackReportsBySubmitter(
+                        pageNumber,
+                        sorting,
+                        submitterId
+                    );
+        }
+    };
+
+    const getReportsAPIRequest = React.useCallback(
+        () => getEndpoints(reportType)(page, sortingOrder, user._id),
+        [reportType, page, sortingOrder, user]
     );
 
-    const bugReportsAPIrequest = React.useCallback(
-        // TODO: Replace with user Id
-        () => getBugReportsBySubmitter(page, sortingOrder, user._id),
-        [page, sortingOrder]
-    );
+    const [sendGetRequest, isLoading] = useEndpoint(getReportsAPIRequest, {
+        onSuccess: (results) => {
+            // Adds type attribute to report objects. This will be needed in children components
 
-    const [sendFeedbackRequest, isLoadingFeedback] = useEndpoint(
-        feedbackReportsAPIrequest,
-        {
-            onSuccess: (results) => {
-                // Adds type attribute to report objects. This will be needed in children components
-                const feedbackReports = results.data.reports.map((report) => ({
+            if (results.data.reports.length === 0) {
+                snack('No reports were found', 'warning');
+            } else {
+                const requestedReports = results.data.reports.map((report) => ({
                     ...report,
-                    type: 'Feedback',
+                    type: reportType,
                 })) as Report[];
                 setNumOfPages(results.data.count / pageSize);
-                setReports(feedbackReports);
-            },
-        }
-    );
-
-    const [sendBugRequest, isLoadingBug] = useEndpoint(bugReportsAPIrequest, {
-        onSuccess: (results) => {
-            const bugReports = results.data.reports.map((report) => ({
-                ...report,
-                type: 'Bug',
-            })) as Report[];
-            setNumOfPages(results.data.count / pageSize);
-            setReports(bugReports);
+                setReports(requestedReports);
+            }
         },
     });
 
@@ -115,19 +133,7 @@ export default function ReportHistory() {
         }
         // save the report type just selected
         setPrevReportType(reportType);
-
-        // Decide which type of request to send
-        switch (reportType) {
-            case 'Feedback':
-                sendFeedbackRequest();
-                break;
-            case 'Bug':
-                sendBugRequest();
-                break;
-            default:
-                sendFeedbackRequest();
-                break;
-        }
+        sendGetRequest();
     };
 
     const handlePageChange = (
@@ -173,6 +179,7 @@ export default function ReportHistory() {
                                     <Select
                                         className={classes.select}
                                         id='reportSelector'
+                                        disabled={isLoading}
                                         displayEmpty
                                         required
                                         value={reportType}
@@ -200,6 +207,7 @@ export default function ReportHistory() {
                                     <Select
                                         id='sortingSelector'
                                         className={classes.select}
+                                        disabled={isLoading}
                                         displayEmpty
                                         required
                                         value={sortingOrder}
@@ -223,7 +231,8 @@ export default function ReportHistory() {
                             </Grid>
                             <Grid item>
                                 <LoadingButton
-                                    loading={isLoadingFeedback || isLoadingBug}
+                                    // loading={isLoadingFeedback || isLoadingBug}
+                                    loading={isLoading}
                                     component={
                                         <Button
                                             type='submit'
@@ -242,7 +251,7 @@ export default function ReportHistory() {
 
             {/*  Loader is rendering at some weird position, is it because of the absolute attribute?  */}
             <Grid container justify='center' alignItems='center'>
-                {isLoadingFeedback || isLoadingBug ? (
+                {isLoading ? (
                     <Loader />
                 ) : (
                     <ReportStateContext.Provider value={customReportFunctions}>
