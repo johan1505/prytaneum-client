@@ -22,18 +22,19 @@ export default function Reply({ reply }: Props) {
                     spacing={3}
                 >
                     <Grid item>
+                        {/* TODO: For now it displays the id of the replier. In the future, display the name of the replier */}
                         <Typography variant='h6'>
                             {reply.repliedBy._id}
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Typography variant='subtitle1'>
+                        <Typography id='replyDate' variant='subtitle1'>
                             {formatDate(new Date(reply.repliedDate))}
                         </Typography>
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <Typography variant='body2' paragraph>
+                    <Typography id='replyContent' variant='body2' paragraph>
                         {reply.content}
                     </Typography>
                 </Grid>
