@@ -4,7 +4,6 @@ import Switch from '@material-ui/core/Switch';
 import useSnack from 'hooks/useSnack';
 import useEndpoint from 'hooks/useEndpoint';
 
-import Loader from 'components/Loader';
 import { updateReportResolvedStatus } from '../api';
 import { FeedbackReport, BugReport } from '../types';
 
@@ -22,6 +21,7 @@ export default function ResolvedSwitch({ report }: Props) {
         [report, resolvedStatus]
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [sendUpdateResolvedRequest, isResolvedStatusLoading] = useEndpoint(
         updateResolvedAPIRequest,
         {
@@ -41,25 +41,21 @@ export default function ResolvedSwitch({ report }: Props) {
 
     return (
         <Grid component='label' container alignItems='center' spacing={2}>
-            {isResolvedStatusLoading ? (
-                <Loader />
-            ) : (
-                <Grid item alignItems='center' container spacing={1}>
-                    <Grid item>Unresolved</Grid>
-                    <Grid item>
-                        <Switch
-                            id='resolvedStatusSwitch'
-                            checked={resolvedStatus}
-                            onChange={() => {
-                                setResolvedStatus(!resolvedStatus);
-                                sendUpdateResolvedRequest();
-                            }}
-                            name='resolved'
-                        />
-                    </Grid>
-                    <Grid item>Resolved</Grid>
+            <Grid item alignItems='center' container spacing={1}>
+                <Grid item>Unresolved</Grid>
+                <Grid item>
+                    <Switch
+                        id='resolvedStatusSwitch'
+                        checked={resolvedStatus}
+                        onChange={() => {
+                            setResolvedStatus(!resolvedStatus);
+                            sendUpdateResolvedRequest();
+                        }}
+                        name='resolved'
+                    />
                 </Grid>
-            )}
+                <Grid item>Resolved</Grid>
+            </Grid>
         </Grid>
     );
 }
