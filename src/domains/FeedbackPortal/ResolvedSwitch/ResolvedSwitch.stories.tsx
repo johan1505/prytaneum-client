@@ -1,8 +1,8 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import faker from 'faker';
 
 import Component from '.';
+import { makeFeedbackReport } from '../reportMaker.mock';
 
 export default { title: 'Domains/ResolvedSwitch' };
 
@@ -10,11 +10,7 @@ export function ResolvedSwitch() {
     return (
         <Container maxWidth='sm'>
             <div style={{ marginTop: '30vh' }}>
-                <Component
-                    reportId={faker.random.alphaNumeric(12)}
-                    reportResolvedStatus={faker.random.boolean()}
-                    reportType='bugs'
-                />
+                <Component report={makeFeedbackReport()} />
             </div>
         </Container>
     );

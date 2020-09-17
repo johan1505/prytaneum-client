@@ -6,26 +6,20 @@ import useEndpoint from 'hooks/useEndpoint';
 
 import Loader from 'components/Loader';
 import { updateReportResolvedStatus } from '../api';
+import { FeedbackReport, BugReport } from '../types';
 
-interface SummaryProps {
-    reportId: string;
-    reportResolvedStatus: boolean;
-    reportType: 'feedback' | 'bugs';
+type Report = FeedbackReport | BugReport;
+interface Props {
+    report: Report;
 }
 
-export default function ReportSummary({
-    reportId,
-    reportResolvedStatus,
-    reportType,
-}: SummaryProps) {
-    const [resolvedStatus, setResolvedStatus] = React.useState(
-        reportResolvedStatus
-    );
+export default function ResolvedSwitch({ report }: Props) {
+    const [resolvedStatus, setResolvedStatus] = React.useState(report.resolved);
     const [snack] = useSnack();
-
     const updateResolvedAPIRequest = React.useCallback(
-        () => updateReportResolvedStatus(reportId, resolvedStatus, reportType),
-        [resolvedStatus]
+        () =>
+            updateReportResolvedStatus(report._id, resolvedStatus, report.type),
+        [report, resolvedStatus]
     );
 
     const [sendUpdateResolvedRequest, isResolvedStatusLoading] = useEndpoint(
@@ -35,6 +29,8 @@ export default function ReportSummary({
                 snack('Resolved status successfully updated', 'success');
             },
             onFailure: () => {
+                // Toggle switch back to original state since update failed
+                setResolvedStatus(!resolvedStatus);
                 snack(
                     'Resolved status could not be updated. Please try again later',
                     'error'
