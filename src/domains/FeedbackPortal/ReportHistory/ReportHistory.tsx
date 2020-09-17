@@ -106,7 +106,7 @@ export default function ReportHistory() {
 
     const getReportsAPIRequest = React.useCallback(
         () => getEndpoints(reportType)(page, sortingOrder, user._id),
-        [reportType, page, sortingOrder, user]
+        [reportType, page, sortingOrder]
     );
 
     const [sendGetRequest, isLoading] = useEndpoint(getReportsAPIRequest, {
@@ -151,13 +151,13 @@ export default function ReportHistory() {
         sendRequest();
     };
 
-    const findReport = (reportsToIterate: Report[], report: Report) => {
+    const findReportIndex = (reportsToIterate: Report[], report: Report) => {
         return reportsToIterate.findIndex((rp) => rp._id === report._id);
     };
 
     const updateReport = (report: Report) => {
         const prevReports = [...reports];
-        const indexOfReport = findReport(prevReports, report);
+        const indexOfReport = findReportIndex(prevReports, report);
         if (indexOfReport === -1) {
             return;
         }

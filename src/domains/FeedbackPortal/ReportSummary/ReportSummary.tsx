@@ -80,7 +80,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
 
     const deleteApiRequest = React.useCallback(
         () => endpoints[report.type](report._id),
-        [report]
+        [endpoints, report]
     );
 
     const [sendDeleteRequest, isLoading] = useEndpoint(deleteApiRequest, {
@@ -101,11 +101,7 @@ export default function ReportSummary({ report, callBack }: SummaryProps) {
 
     function ResolvedSection() {
         return user.isAdmin ? (
-            <ResolvedSwitch
-                reportId={report._id}
-                reportResolvedStatus={report.resolved}
-                reportType={report.type}
-            />
+            <ResolvedSwitch report={report} />
         ) : (
             <Bold>
                 {report.resolved ? (

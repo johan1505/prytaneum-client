@@ -22,7 +22,7 @@ export default function ReplyForm({ reportId, reportType }: Props) {
 
     const replyToAPIRequest = React.useCallback(
         () => replyToReport(reportId, replyContent, reportType),
-        [replyContent]
+        [reportId, replyContent, reportType]
     );
 
     const [sendReplyRequest, isReplyLoading] = useEndpoint(replyToAPIRequest, {

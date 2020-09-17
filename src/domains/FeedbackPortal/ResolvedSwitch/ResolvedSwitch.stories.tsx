@@ -9,11 +9,13 @@ export default { title: 'Domains/ResolvedSwitch' };
 export function ResolvedSwitch() {
     return (
         <Container maxWidth='sm'>
-            <Component
-                reportId={faker.random.alphaNumeric(12)}
-                reportResolvedStatus={faker.random.boolean()}
-                apiEndpoint='bugs'
-            />
+            <div style={{ marginTop: '30vh' }}>
+                <Component
+                    reportId={faker.random.alphaNumeric(12)}
+                    reportResolvedStatus={faker.random.boolean()}
+                    reportType='bugs'
+                />
+            </div>
         </Container>
     );
 }
