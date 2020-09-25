@@ -21,47 +21,55 @@ export async function createFeedbackReport(form: FeedbackForm) {
 export async function getFeedbackReports(
     page: number,
     sortByDate: BooleanStringified,
-    resolved: BooleanStringified
+    resolved: BooleanStringified,
+    limit: number
 ) {
-    if (!page || !sortByDate || !resolved) {
+    if (!page || !limit) {
+        throw errors.internalError();
+    }
+    if (!sortByDate || !resolved) {
         throw errors.fieldError();
     }
     const params = {
         page,
         sortByDate,
+        limit,
         resolved,
     };
-    return axios.get<{ reports: FeedbackReport[]; count: number }>(
-        '/api/feedback/get-reports',
-        {
-            params,
-        }
-    );
+    return axios.get<{
+        reports: FeedbackReport[];
+        count: number;
+        hasNext: boolean;
+    }>('/api/feedback/get-reports', {
+        params,
+    });
 }
 
 export async function getFeedbackReportsBySubmitter(
     page: number,
+    limit: number,
     sortByDate: BooleanStringified,
     submitterId: string
 ) {
-    if (!page || !sortByDate) {
+    if (!sortByDate) {
         throw errors.fieldError();
     }
-
-    if (!submitterId) {
+    if (!submitterId || !page || !limit) {
         throw errors.internalError();
     }
 
     const params = {
         page,
+        limit,
         sortByDate,
     };
-    return axios.get<{ reports: FeedbackReport[]; count: number }>(
-        `/api/feedback/get-reports/${submitterId}`,
-        {
-            params,
-        }
-    );
+    return axios.get<{
+        reports: FeedbackReport[];
+        count: number;
+        hasNext: boolean;
+    }>(`/api/feedback/get-reports/${submitterId}`, {
+        params,
+    });
 }
 
 export async function updateFeedbackReport(form: FeedbackForm) {
@@ -103,18 +111,23 @@ export async function createBugReport(form: BugReportForm, townhallId: string) {
 
 export async function getBugReports(
     page: number,
+    limit: number,
     sortByDate: BooleanStringified,
     resolved: BooleanStringified
 ) {
-    if (!page || !sortByDate || !resolved) {
+    if (!page || !limit) {
+        throw errors.internalError();
+    }
+    if (!sortByDate || !resolved) {
         throw errors.fieldError();
     }
     const params = {
         page,
+        limit,
         sortByDate,
         resolved,
     };
-    return axios.get<{ reports: BugReport[]; count: number }>(
+    return axios.get<{ reports: BugReport[]; count: number; hasNext: boolean }>(
         '/api/bugs/get-reports',
         {
             params,
@@ -124,22 +137,24 @@ export async function getBugReports(
 
 export async function getBugReportsBySubmitter(
     page: number,
+    limit: number,
     sortByDate: BooleanStringified,
     submitterId: string
 ) {
-    if (!page || !sortByDate) {
+    if (!sortByDate) {
         throw errors.fieldError();
     }
 
-    if (!submitterId) {
+    if (!submitterId || !page || !limit) {
         throw errors.internalError();
     }
 
     const params = {
         page,
+        limit,
         sortByDate,
     };
-    return axios.get<{ reports: BugReport[]; count: number }>(
+    return axios.get<{ reports: BugReport[]; count: number; hasNext: boolean }>(
         `/api/bugs/get-reports/${submitterId}`,
         {
             params,

@@ -13,11 +13,10 @@ import {
     Search as SearchIcon,
     ArrowDropDown as ArrowDownIcon,
 } from '@material-ui/icons';
-import Pagination from '@material-ui/lab/Pagination';
 
 import useEndpoint from 'hooks/useEndpoint';
 import useSnack from 'hooks/useSnack';
-import Loader from 'components/Loader';
+import InfiniteScroll from 'components/InfiniteScroll';
 import LoadingButton from 'components/LoadingButton';
 import ReportList from 'domains/FeedbackPortal/ReportList';
 import ReportStateContext from '../Contexts/ReportStateContext';
@@ -43,13 +42,13 @@ const sortingOptions = [
 const user = {
     _id: '123456789',
 };
-const pageSize = 10;
 const useStyles = makeStyles((theme: Theme) => ({
     select: {
         borderColor: theme.palette.common.white,
         color: theme.palette.common.white,
     },
 }));
+const maxNumberOfReportsPerResponse = 15;
 
 export default function ReportHistory() {
     const classes = useStyles();
@@ -57,7 +56,7 @@ export default function ReportHistory() {
     const [reportType, setReportType] = React.useState<ReportTypes>('');
     const [sortingOrder, setSortingOrder] = React.useState<SortingTypes>('');
     const [page, setPage] = React.useState(1);
-    const [numOfPages, setNumOfPages] = React.useState(0);
+    const [hasNext, setHasNext] = React.useState(true);
     const [reports, setReports] = React.useState<Report[]>([]);
     const [snack] = useSnack();
 
@@ -81,6 +80,7 @@ export default function ReportHistory() {
                 ) =>
                     getFeedbackReportsBySubmitter(
                         pageNumber,
+                        maxNumberOfReportsPerResponse,
                         sorting,
                         submitterId
                     );
@@ -89,7 +89,13 @@ export default function ReportHistory() {
                     pageNumber: number,
                     sorting: SortingTypes,
                     submitterId: string
-                ) => getBugReportsBySubmitter(pageNumber, sorting, submitterId);
+                ) =>
+                    getBugReportsBySubmitter(
+                        pageNumber,
+                        maxNumberOfReportsPerResponse,
+                        sorting,
+                        submitterId
+                    );
             default:
                 return (
                     pageNumber: number,
@@ -98,6 +104,7 @@ export default function ReportHistory() {
                 ) =>
                     getFeedbackReportsBySubmitter(
                         pageNumber,
+                        maxNumberOfReportsPerResponse,
                         sorting,
                         submitterId
                     );
@@ -112,42 +119,46 @@ export default function ReportHistory() {
     const [sendGetRequest, isLoading] = useEndpoint(getReportsAPIRequest, {
         onSuccess: (results) => {
             // Adds type attribute to report objects. This will be needed in children components
-
             if (results.data.reports.length === 0) {
                 snack('No reports were found', 'warning');
             } else {
+                // Add type attribute to reports
                 const requestedReports = results.data.reports.map((report) => ({
                     ...report,
                     type: reportType,
                 })) as Report[];
-                setNumOfPages(results.data.count / pageSize);
-                setReports(requestedReports);
+                // If type of report is still the same then append fetched reports to the state of reports
+                if (prevReportType === reportType) {
+                    setReports((prevReports) => [
+                        ...prevReports,
+                        ...requestedReports,
+                    ]);
+                } else {
+                    setReports(requestedReports);
+                }
+                // Increment page regardless
+                setPage(page + 1);
             }
+            setHasNext(results.data.hasNext);
+            // save the report type just selected
+            setPrevReportType(reportType);
         },
     });
 
     const sendRequest = () => {
-        // Clean reports from state of component
-        setReports([]);
-        // If the report type selected has changed then set the page number to 1
-        if (prevReportType !== reportType) {
-            setPage(1);
-        }
-        // save the report type just selected
-        setPrevReportType(reportType);
+        // If reports type has changed then set page number to 1
+        if (prevReportType !== reportType) setPage(1);
         sendGetRequest();
-    };
-
-    const handlePageChange = (
-        event: React.ChangeEvent<unknown>,
-        value: number
-    ) => {
-        setPage(value);
-        sendRequest();
     };
 
     const getReports = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // If the type of report has not been changed then just return. User Needs to scroll down to get more reports
+        if (prevReportType === reportType) {
+            console.log('xd');
+            return;
+        }
+
         sendRequest();
     };
 
@@ -249,30 +260,17 @@ export default function ReportHistory() {
                     </form>
                 </Toolbar>
             </AppBar>
-
-            {/*  Loader is rendering at some weird position, is it because of the absolute attribute?  */}
-            <Grid container justify='center' alignItems='center'>
-                {isLoading ? (
-                    <Loader />
-                ) : (
+            {/* TODO: Infinite scroll does not work, this might be because it uses a main element  */}
+            <InfiniteScroll
+                loadMore={hasNext ? sendRequest : null}
+                isLoading={isLoading}
+            >
+                <Grid container justify='center' alignItems='center'>
                     <ReportStateContext.Provider value={customReportFunctions}>
                         <ReportList reports={reports} />
                     </ReportStateContext.Provider>
-                )}
-            </Grid>
-
-            {/* When infinite scrolling is complete, this pagination seciton can be removed since it is suboptimal */}
-            {reports.length !== 0 && (
-                <Grid container justify='center' alignItems='center'>
-                    <Pagination
-                        siblingCount={0}
-                        color='primary'
-                        count={numOfPages}
-                        page={page}
-                        onChange={handlePageChange}
-                    />
                 </Grid>
-            )}
+            </InfiniteScroll>
         </div>
     );
 }

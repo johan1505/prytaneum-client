@@ -21,6 +21,10 @@ const makeBugReports = (n: number) => {
     return reports;
 };
 
+function getRandomInt(max: number) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 export default [
     // Feedback reports
     rest.post('/api/feedback/create-report', (req, res, ctx) => {
@@ -36,6 +40,7 @@ export default [
     rest.get('/api/feedback/get-reports', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const page = req.url.searchParams.get('page');
+        const limit = req.url.searchParams.get('limit');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const sortByDate = req.url.searchParams.get('sortByDate');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,7 +52,8 @@ export default [
         return res(
             ctx.status(200),
             ctx.json({
-                reports: makeFeedbackReports(10),
+                reports: makeFeedbackReports(limit),
+                hasNext: !(getRandomInt(5) === 2),
                 count: 90,
             })
         );
@@ -57,6 +63,7 @@ export default [
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
         const page = req.url.searchParams.get('page');
+        const limit = req.url.searchParams.get('limit');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const sortByDate = req.url.searchParams.get('sortByDate');
 
@@ -66,7 +73,8 @@ export default [
         return res(
             ctx.status(200),
             ctx.json({
-                reports: makeFeedbackReports(10),
+                reports: makeFeedbackReports(limit),
+                hasNext: !(getRandomInt(5) === 2),
                 count: 70,
             })
         );
@@ -134,6 +142,7 @@ export default [
     rest.get('/api/bugs/get-reports', (req, res, ctx) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const page = req.url.searchParams.get('page');
+        const limit = req.url.searchParams.get('limit');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const sortByDate = req.url.searchParams.get('sortByDate');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -145,7 +154,8 @@ export default [
         return res(
             ctx.status(200),
             ctx.json({
-                reports: makeBugReports(10),
+                reports: makeBugReports(limit),
+                hasNext: !(getRandomInt(5) === 2),
                 count: 90,
             })
         );
@@ -155,6 +165,7 @@ export default [
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { submitterId } = req.params;
         const page = req.url.searchParams.get('page');
+        const limit = req.url.searchParams.get('limit');
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const sortByDate = req.url.searchParams.get('sortByDate');
 
@@ -164,7 +175,8 @@ export default [
         return res(
             ctx.status(200),
             ctx.json({
-                reports: makeBugReports(10),
+                reports: makeBugReports(limit),
+                hasNext: !(getRandomInt(5) === 2),
                 count: 90,
             })
         );

@@ -53,25 +53,41 @@ describe('#FeedbackReports', () => {
 
     describe('#get', () => {
         const page = faker.random.number();
+        const limit = faker.random.number();
         const sortByDate = 'false';
         const submitterId = faker.random.alphaNumeric(12);
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getFeedbackReportsBySubmitter(0, sortByDate, submitterId)
-            ).rejects.toThrow(errors.fieldError());
+                API.getFeedbackReportsBySubmitter(
+                    0,
+                    limit,
+                    sortByDate,
+                    submitterId
+                )
+            ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
-
+        it('should reject since limit is not provided', async () => {
+            await expect(
+                API.getFeedbackReportsBySubmitter(
+                    page,
+                    0,
+                    sortByDate,
+                    submitterId
+                )
+            ).rejects.toThrow(errors.internalError());
+            expect(axios.get).not.toHaveBeenCalled();
+        });
         it('should reject since sortByDate is not provided', async () => {
             await expect(
-                API.getFeedbackReportsBySubmitter(page, '', submitterId)
+                API.getFeedbackReportsBySubmitter(page, limit, '', submitterId)
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
         it('should reject since submitterId is not provided', async () => {
             await expect(
-                API.getFeedbackReportsBySubmitter(page, sortByDate, '')
+                API.getFeedbackReportsBySubmitter(page, limit, sortByDate, '')
             ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
@@ -82,13 +98,19 @@ describe('#FeedbackReports', () => {
                 resolvedValue
             );
             await expect(
-                API.getFeedbackReportsBySubmitter(page, sortByDate, submitterId)
+                API.getFeedbackReportsBySubmitter(
+                    page,
+                    limit,
+                    sortByDate,
+                    submitterId
+                )
             ).resolves.toBe(resolvedValue);
             expect(axios.get).toHaveBeenCalledWith(
                 `/api/feedback/get-reports/${submitterId}`,
                 {
                     params: {
                         page,
+                        limit,
                         sortByDate,
                     },
                 }
@@ -187,26 +209,34 @@ describe('#BugReports', () => {
 
     describe('#get', () => {
         const page = faker.random.number();
+        const limit = faker.random.number();
         const sortByDate = 'true';
         const submitterId = faker.random.alphaNumeric(12);
 
         it('should reject since page number is not provided', async () => {
             await expect(
-                API.getBugReportsBySubmitter(0, sortByDate, submitterId)
-            ).rejects.toThrow(errors.fieldError());
+                API.getBugReportsBySubmitter(0, limit, sortByDate, submitterId)
+            ).rejects.toThrow(errors.internalError());
+            expect(axios.get).not.toHaveBeenCalled();
+        });
+
+        it('should reject since limit is not provided', async () => {
+            await expect(
+                API.getBugReportsBySubmitter(page, 0, sortByDate, submitterId)
+            ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
         it('should reject since sortByDate is not provided', async () => {
             await expect(
-                API.getBugReportsBySubmitter(page, '', submitterId)
+                API.getBugReportsBySubmitter(page, limit, '', submitterId)
             ).rejects.toThrow(errors.fieldError());
             expect(axios.get).not.toHaveBeenCalled();
         });
 
         it('should reject since submitterId is not provided', async () => {
             await expect(
-                API.getBugReportsBySubmitter(page, sortByDate, '')
+                API.getBugReportsBySubmitter(page, limit, sortByDate, '')
             ).rejects.toThrow(errors.internalError());
             expect(axios.get).not.toHaveBeenCalled();
         });
@@ -217,13 +247,19 @@ describe('#BugReports', () => {
                 resolvedValue
             );
             await expect(
-                API.getBugReportsBySubmitter(page, sortByDate, submitterId)
+                API.getBugReportsBySubmitter(
+                    page,
+                    limit,
+                    sortByDate,
+                    submitterId
+                )
             ).resolves.toBe(resolvedValue);
             expect(axios.get).toHaveBeenCalledWith(
                 `/api/bugs/get-reports/${submitterId}`,
                 {
                     params: {
                         page,
+                        limit,
                         sortByDate,
                     },
                 }
